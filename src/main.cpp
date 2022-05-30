@@ -12,9 +12,8 @@ int main(int argc, char** argv)
     {
 
         // debug section
-        std::vector<q2::Patient> patients = q2::read_file("lung_cancer.csv");
+        auto flights = q3::gather_flights("flights.txt");
 
-        // std::cout << patients[0].name << std::endl;
     } else {
         ::testing::InitGoogleTest(&argc, argv);
         std::cout << "RUNNING TESTS ..." << std::endl;

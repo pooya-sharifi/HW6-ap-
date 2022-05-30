@@ -1,5 +1,6 @@
 #ifndef Q2_H
 #define Q2_H
+#include <algorithm>
 #include <fstream>
 #include <regex>
 #include <sstream>
@@ -46,5 +47,14 @@ inline std::vector<Patient> read_file(std::string filename)
     // std::cout<< txt << std::endl;
     return pat_vec;
 };
+
+inline void sort(std::vector<Patient>& vec_p)
+{
+    auto lambda = [](Patient patient, Patient patient_2) { return (((3 * (patient.age)) + (5 * (patient.smokes)) + (2 * (patient.area_q)) + (4 * (patient.alkhol))) > ((3 * (patient_2.age)) + (5 * (patient_2.smokes)) + (2 * (patient_2.area_q)) + (4 * (patient_2.alkhol)))); };
+    // std::cout << lambda(vec_p[0]) << std::endl;
+    std::sort(vec_p.begin(), vec_p.end(), lambda);
+    std::cout << "*******" << vec_p[0].name << "Alec Guinness" << vec_p[10].name << "Sidney Poitier" << vec_p[30].name << "Jane Wyman" << vec_p[58].name << "Joan Crawford" << std::endl;
+}
+
 }
 #endif // Q2_H
