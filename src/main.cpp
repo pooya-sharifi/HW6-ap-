@@ -12,7 +12,8 @@ int main(int argc, char** argv)
     {
 
         // debug section
-        // auto flights = q3::gather_flights("flights.txt");
+        auto flights = q3::gather_flights("flights.txt");
+        std::cout << flights.top().flight_number << std::endl;
 
     } else {
         ::testing::InitGoogleTest(&argc, argv);

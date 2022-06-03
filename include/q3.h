@@ -1,6 +1,7 @@
 #ifndef Q3_H
 #define Q3_H
 #include <queue>
+#include <vector>
 namespace q3 {
 struct Flight {
     std::string flight_number;
@@ -9,43 +10,62 @@ struct Flight {
     size_t connection_times;
     size_t price;
 };
-inline std::priority_queue<Flight> gather_flights(std::string filename)
+struct comp {
+    bool operator()(Flight a, Flight b)
+    {
+        std::cout << a.duration << "####" << a.connection_times << "####" << a.price << "####" << a.duration + a.connection_times + (3 * a.price) << std::endl;
+        std::cout << b.duration << "####" << b.connection_times << "####" << b.price << "####" << b.duration + b.connection_times + (3 * b.price) << std::endl;
+        return (a.duration + a.connection_times + (3 * a.price)) > (b.duration + b.connection_times + (3 * b.price));
+    }
+};
+inline std::priority_queue<Flight, std::vector<Flight>, comp> gather_flights(std::string filename)
 {
-    std::priority_queue<Flight> khers;
+    std::priority_queue<Flight, std::vector<Flight>, comp> khers;
     auto a = khers;
     // std::vector<Patient> pat_vec;
     std::ifstream file(filename);
     std::stringstream buffer;
     buffer << file.rdbuf();
     std::string txt = buffer.str();
-    //\d- \w+:\w+ - \w+:\w+
     // std::regex pattern(R"(\d- \w+:(\w+) - \w+:(\w+) - \w+:(\w+) - \w+:((\w+)||((\w+,)*(\w+))) - \w+:(\w+))");
     // 1- flight_number:QR492 - duration:11h30m - connections:3 - connection_times:2h,1h30m,4h15m - price:250
-    std::regex pattern(R"(\d- \w+:(\w+) - \w+:(\w+) - \w+:(\w+) - \w+:((\d+)h(\d+)?m?,?)* - \w+:(\w+))");
+    // std::regex pattern(R"(\d- \w+:(\w+) - \w+:(\w+) - \w+:(\w+) - \w+:(?:(\d+)h(\d+)?m?,?)+ - \w+:(\w+))");
+    std::regex pattern(R"(\d- \w+:(\w+) - \w+:(\d+)?h?(\d+)?m? - \w+:(\w+) - \w+:(\d+)h(\d+)?m?,?(\d+)?h?(\d+)?m?,?(\d+)?h?(\d+)?m?,? - \w+:(\w+))");
 
     std::smatch match;
     while (std::regex_search(txt, match, pattern)) {
-        std::cout << match[0] << std::endl;
-        std::cout << match[1] << std::endl;
         Flight fl;
         fl.flight_number = match[1];
-        std::cout << match[2] << std::endl;
-        fl.duration = stoi(match[2]);
-        std::cout << match[3] << std::endl;
-        fl.connections = stoi(match[3]);
+        fl.duration = stoi(match[2]) * 60;
+        if (match[3] != "") {
+            fl.duration = fl.duration + stoi(match[3]);
+            std::cout << fl.duration << std::endl;
+        }
+        fl.connections = stoi(match[4]);
         size_t size = match.size();
-        std::cout << size << std::endl;
 
-        std::cout << "****" << match[4] << std::endl;
-        std::cout << "****" << match[5] << std::endl;
-        std::cout << "****" << match[6] << std::endl;
-        std::cout << "****" << match[7] << std::endl;
-        std::cout << "****" << match[8] << std::endl;
-        std::cout << "****" << match[9] << std::endl;
-        std::cout << "****" << match[10] << std::endl;
+        fl.connection_times = (stoi(match[5]) * 60);
+        if (match[6] != "") {
+            fl.connection_times = fl.connection_times + stoi(match[6]);
+        }
 
+        if (match[7] != "")
+            fl.connection_times = fl.connection_times + stoi(match[7]) * 60;
+
+        if (match[8] != "")
+            fl.connection_times = fl.connection_times + stoi(match[8]);
+
+        if (match[9] != "")
+            fl.connection_times = fl.connection_times + stoi(match[9]) * 60;
+
+        if (match[10] != "")
+            fl.connection_times = fl.connection_times + stoi(match[10]);
+
+        fl.price = stoi(match[11]);
+        khers.push(fl);
         txt = match.suffix().str();
     }
+
     return khers;
 }
 }

@@ -27,6 +27,7 @@ inline Vector2D kalman_filter(std::vector<Sensor> sensors)
     auto y_new = std::accumulate(sensors.begin(), sensors.end(), 0.0, lambda_y);
     std::cout << y_new << std::endl;
     Vector2D return_vec;
+
     x_new = x_new / accuracy;
     return_vec.x = x_new;
     y_new = y_new / accuracy;
