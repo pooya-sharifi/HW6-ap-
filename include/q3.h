@@ -13,16 +13,13 @@ struct Flight {
 struct comp {
     bool operator()(Flight a, Flight b)
     {
-        std::cout << a.duration << "####" << a.connection_times << "####" << a.price << "####" << a.duration + a.connection_times + (3 * a.price) << std::endl;
-        std::cout << b.duration << "####" << b.connection_times << "####" << b.price << "####" << b.duration + b.connection_times + (3 * b.price) << std::endl;
         return (a.duration + a.connection_times + (3 * a.price)) > (b.duration + b.connection_times + (3 * b.price));
     }
 };
 inline std::priority_queue<Flight, std::vector<Flight>, comp> gather_flights(std::string filename)
 {
     std::priority_queue<Flight, std::vector<Flight>, comp> khers;
-    auto a = khers;
-    // std::vector<Patient> pat_vec;
+
     std::ifstream file(filename);
     std::stringstream buffer;
     buffer << file.rdbuf();

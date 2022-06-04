@@ -26,11 +26,8 @@ inline std::vector<Patient> read_file(std::string filename)
 
     // std::regex_search(txt, match, pattern)
     while (std::regex_search(txt, match, pattern)) {
-        std::cout << match[0] << std::endl;
         Patient x;
         x.name = (static_cast<std::string>(match[1]) + " " + static_cast<std::string>(match[2]));
-        std::cout << x.name << std::endl;
-        std::cout << match[3] << std::endl;
 
         x.age = std::stoi(static_cast<std::string>(match[3]));
         x.smokes = std::stoi(match[4]);
@@ -40,9 +37,6 @@ inline std::vector<Patient> read_file(std::string filename)
         pat_vec.push_back(x);
         txt = match.suffix().str();
     }
-    std::cout << pat_vec[0].name << std::endl;
-    std::cout << pat_vec[20].name << std::endl;
-    std::cout << pat_vec[58].name << std::endl;
 
     // std::cout<< txt << std::endl;
     return pat_vec;
@@ -53,7 +47,6 @@ inline void sort(std::vector<Patient>& vec_p)
     auto lambda = [](Patient patient, Patient patient_2) { return (((3 * (patient.age)) + (5 * (patient.smokes)) + (2 * (patient.area_q)) + (4 * (patient.alkhol))) > ((3 * (patient_2.age)) + (5 * (patient_2.smokes)) + (2 * (patient_2.area_q)) + (4 * (patient_2.alkhol)))); };
     // std::cout << lambda(vec_p[0]) << std::endl;
     std::sort(vec_p.begin(), vec_p.end(), lambda);
-    std::cout << "*******" << vec_p[0].name << "Alec Guinness" << vec_p[10].name << "Sidney Poitier" << vec_p[30].name << "Jane Wyman" << vec_p[58].name << "Joan Crawford" << std::endl;
 }
 
 }
